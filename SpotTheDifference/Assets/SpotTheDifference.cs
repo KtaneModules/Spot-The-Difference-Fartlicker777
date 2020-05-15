@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ public class SpotTheDifference : MonoBehaviour
     static int moduleIdCounter = 1;
     int moduleId;
     private bool moduleSolved;
-	
+
     private List<int> abcefgh = new List<int>{0,1,2,3,2,1,1,1,3,3,3,0,0,0,2,1,3,2,0,0,0,3,2,2,1,1,3,2,0,0,1,0,3,3,0,1,1,2,2,2,0,0,3,0,1,1,2,1,3,0,3,3,2,3,1,2,1,2,0,0};
     int hgnjmhgnjmgfnb = 0;
     int jon = -1000000;
@@ -30,7 +30,7 @@ public class SpotTheDifference : MonoBehaviour
     private Vector3 d = new Vector3(0f, 0.14f, 0f);
     Vector3[] idontknow = new Vector3[4];
     private List<string> logcolor = new List<string>{"Blue", "Green", "Orange", "Red"};
-	
+
 	#pragma warning disable 0649
     private bool TwitchPlaysActive;
     #pragma warning restore 0649
@@ -38,7 +38,7 @@ public class SpotTheDifference : MonoBehaviour
     void Awake ()
 	{
         moduleId = moduleIdCounter++;
-		
+
 		foreach (KMSelectable Sphere in Spheres)
 		{
 			Sphere.OnInteract += delegate () { SpheresPress(Sphere); return false; };
@@ -58,7 +58,7 @@ public class SpotTheDifference : MonoBehaviour
 		StartCoroutine(looper());
 		GetComponent<KMBombModule>().OnActivate += SpotTheDifferenceInTP;
 	}
-	
+
 	void SpotTheDifferenceInTP()
 	{
 		if (TwitchPlaysActive == false)
@@ -68,16 +68,16 @@ public class SpotTheDifference : MonoBehaviour
 				Numberal[x].text = "";
 			}
 		}
-		
+
 	}
-	
+
 	void SpheresPress (KMSelectable Sphere)
 	{
 		if (moduleSolved == true)
 		{
 			return;
 		}
-		
+
 		for (int i = 0; i < WeedChungi.Count(); i++)
 		{
 			if (Sphere == Spheres[i])
@@ -98,7 +98,7 @@ public class SpotTheDifference : MonoBehaviour
 						Numberal[x].text = "";
 					}
 				}
-				
+
 				else
 				{
 					GetComponent<KMBombModule>().HandleStrike();
@@ -107,7 +107,7 @@ public class SpotTheDifference : MonoBehaviour
 			}
 		}
 	}
-	
+
 	private IEnumerator looper()
 	{
 		float time = 0f;
@@ -121,7 +121,7 @@ public class SpotTheDifference : MonoBehaviour
 				{
 					BiggerChungus[i].transform.localPosition = Vector3.Lerp(BiggerChungus[i].transform.localPosition, b, time);
 				}
-				
+
 				else if (Math.Abs(idontknow[i].y - b.y) <= .01f)
 				{
 					BiggerChungus[i].transform.localPosition = Vector3.Lerp(BiggerChungus[i].transform.localPosition, c, time);
@@ -143,12 +143,14 @@ public class SpotTheDifference : MonoBehaviour
       yield return new WaitForSeconds(0.2f);
       StartCoroutine(looper());
 	}
-	
+
 	//twitch plays
     #pragma warning disable 414
     private readonly string TwitchHelpMessage = @"Use the command !{0} ball [1-60] to press the numbered ball on the module";
     #pragma warning restore 414
-	
+
+	string[] Valid = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+
 	IEnumerator ProcessTwitchCommand(string command)
 	{
 		string[] parameters = command.Split(' ');
@@ -160,18 +162,36 @@ public class SpotTheDifference : MonoBehaviour
 				yield return "sendtochaterror The parameter length is invalid";
 				yield break;
 			}
-			
-			for (int x = 0; x < 60; x++)
+
+			foreach (char c in parameters[1])
 			{
-				if ((Int32.Parse(parameters[1])+1).ToString() == Numberal[x].text)
+				if (!c.ToString().EqualsAny(Valid))
 				{
-					Spheres[x-1].OnInteract();
+					yield return "sendtochaterror The text contains an invalid character";
 					yield break;
 				}
 			}
-			
-			yield return "sendtochaterror The text written was not between 1-60";
-			yield break;
+
+			if (parameters[1].Length > 2 || parameters[1].Length < 1)
+			{
+				yield return "sendtochaterror The number length is not even valid anymore";
+				yield break;
+			}
+
+			if (Int32.Parse(parameters[1]) > 60 || Int32.Parse(parameters[1]) < 1)
+			{
+				yield return "sendtochaterror The number is not between 1-60";
+				yield break;
+			}
+
+			for (int x = 0; x < 60; x++)
+			{
+				if (Numberal[x].text == (Int32.Parse(parameters[1])).ToString())
+				{
+					Spheres[x].OnInteract();
+					yield break;
+				}
+			}
 		}
 	}
 }
