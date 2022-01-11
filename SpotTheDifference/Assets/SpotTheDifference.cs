@@ -194,4 +194,10 @@ public class SpotTheDifference : MonoBehaviour
 			}
 		}
 	}
+
+	IEnumerator TwitchHandleForcedSolve()
+    {
+		yield return null;
+		Spheres[hgnjmhgnjmgfnb].OnInteract();
+    }
 }
