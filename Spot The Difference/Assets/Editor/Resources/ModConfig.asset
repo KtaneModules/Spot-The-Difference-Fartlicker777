@@ -14,7 +14,17 @@ MonoBehaviour:
   id: SpotTheDifference
   title: Spot The Difference
   author: Me
-  description: Tough as balls...
+  description: 'Hard as balls...
+
+
+    Click on the ball that is incorrectly colored according to the picture in the
+    manual.
+
+
+    Manual can be found at ktane.timwi.de or in the manuals folder of the game.
+
+
+    If there are any bugs, contact Fartlicker777#9169 on Steam.'
   version: 
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 40b55f71430ed99458d1c57f708e4b55, type: 3}
